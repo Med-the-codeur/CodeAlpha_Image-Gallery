@@ -1,55 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Image-Gallery</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-   <section class="Gallery">
+  <section class="Gallery">
     <h1 class="Gallery-title">My Image-Gallery</h1>
-    <div class="img">
-    <img src="img/img1.jpg" alt="">
-    <img src="img/img2.jpg" alt="">
-    <img src="img/img3.jpg" alt="">
-    <img src="img/img4.png" alt="">
-    <img src="img/img5.png" alt="">
-    <img src="img/img6.jpg" alt="">
-    
-  </div>
-   </section>
-   <!-- <div class="lightbox-view">
-    <button class="close">X</button>
-    <h1>Image Viewer</h1>
-    <p>Click on the left or right arrow to view images</p>
-    <p>Click on the cross to close the viewer</p>
-    <p>Click on the image to view it in full size</p>
-
-
-    <button class="prev"> < </button>
-
-    <img class="img-view" src="" alt="">
-    <button class="next"> > </button>
-
-    
-    <div class="img-list">
-      <img src="https://placehold.co/600x400/B7D3F2/00/png" alt="">
-      <img src="https://placehold.co/600x400/B7D3F2/00/png" alt="">
-      <img src="https://placehold.co/600x400/B7D3F2/00/png" alt="">
-      <img src="https://placehold.co/600x400/B7D3F2/00/png" alt="">
-      <img src="https://placehold.co/600x400/B7D3F2/00/png" alt="">
-      <img src="https://placehold.co/600x400/B7D3F2/00/png" alt="">
-      <img src="https://placehold.co/600x400/B7D3F2/00/png" alt="">
-      <img src="https://placehold.co/600x400/B7D3F2/00/png" alt="">
-      <img src="https://placehold.co/600x400/B7D3F2/00/png" alt="">
+    <div class="filters">
+      <button data-filter="all" class="active">All</button>
+      <button data-filter="nature">Nature</button>
+      <button data-filter="ville">Ville</button>
+      <button data-filter="animaux">Animaux</button>
+      <button data-filter="campagne">Campagne</button>
     </div>
+    <div class="img-List">
+      <img src="img/img1.jpg" alt="Montagne" data-category="nature">
+      <img src="img/img2.jpg" alt="Forêt" data-category="nature">
+      <img src="img/img3.jpg" alt="Ville" data-category="ville">
+      <img src="img/img4.png" alt="Chat" data-category="animaux">
+      <img src="img/img5.png" alt="Chien" data-category="animaux">
+      <img src="img/img6.jpg" alt="Rue" data-category="ville">
+      <img src="img/img7.jpg" alt="chevre" data-category="animaux">
+      <img src="img/img8.jpg" alt="bord de la mer" data-category="campagne">
+      <img src="img/img9.jpg" alt="campagne" data-category="campagne">
+      <img src="img/img10.jpg" alt="foret" data-category="nature">
+      <img src="img/img11.jpg" alt="eau" data-category="nature">
 
+    </div>
+  </section>
+  <div class="lightbox-view">
+    <button class="close">X</button>
+    <button class="prev">
+      < </button>
+        <img class="img-view" src="" alt="">
+        <button class="next"> > </button>
+  </div>
 
-
-   </div> -->
-   <script>
+  <footer>
+    <p>Created by <a href="https://github.com/Med-the-codeur" target="_blank">Med-the-codeur</a></p>
+    <p>copyright © <script>document.write(new Date().getFullYear())</script></p>
+  </footer>
+  <script>
+    const imgs = document.querySelectorAll('.img-List img');
+    const imgView = document.querySelector('.img-view');
+    const lightbox = document.querySelector('.lightbox-view');
+    const closebtn = document.querySelector('.close');
+    const prevbtn = document.querySelector('.prev');
+    const nextbtn = document.querySelector('.next');
+    const filterButtons = document.querySelectorAll('.filters button');
     
-   </script>
+
+    closebtn.addEventListener('click', () => {
+      lightbox.style.display = 'none';
+    })
+    prevbtn.addEventListener('click', () => {
+      const currentSrc = imgView.src;
+      const currentIndex = Array.from(imgs).findIndex(img => img.src === currentSrc);
+      const prevIndex = (currentIndex - 1 + imgs.length) % imgs.length;
+      imgView.src = imgs[prevIndex].src;
+    });
+    nextbtn.addEventListener('click', () => {
+      const currentSrc = imgView.src;
+      const currentIndex = Array.from(imgs).findIndex(img => img.src === currentSrc);
+      const nextIndex = (currentIndex + 1) % imgs.length;
+      imgView.src = imgs[nextIndex].src;
+
+    });
+
+    imgs.forEach((img) => {
+      img.addEventListener('click', () => {
+        lightbox.style.display = 'flex';
+        imgView.src = img.src;
+      });
+    });
+
+    // Filter functionality
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        const filter = button.getAttribute('data-filter');
+
+        imgs.forEach(img => {
+          const category = img.getAttribute('data-category');
+
+          if (filter === "all" || category === filter) {
+            img.style.display = "block";
+          } else {
+            img.style.display = "none";
+          }
+        });
+      });
+    });
+
+
+
+  </script>
 </body>
+
 </html>
